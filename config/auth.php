@@ -36,16 +36,13 @@ return [
     */
 
     'guards' => [
-
-
-        'guests' => [
+        'web' => [
             'driver' => 'session',
-            'provider' => 'guest_users',
+            'provider' => 'users',
         ],
-
         'staff' => [
             'driver' => 'session',
-            'provider' => 'staff_users',
+            'provider' => 'staffs',
         ],
     ],
 
@@ -67,16 +64,15 @@ return [
     */
 
     'providers' => [
-
-
-        'guest_users' => [
+        'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-        'staff_users' => [
+        'staffs' => [
             'driver' => 'eloquent',
-            'model' =>  App\Models\Staff::class,
+            'model' => env('AUTH_MODEL', App\Models\Staff::class),
         ],
+
 
         // 'users' => [
         //     'driver' => 'database',
@@ -99,31 +95,23 @@ return [
     |
     | The throttle setting is the number of seconds a user must wait before
     | generating more password reset tokens. This prevents the user from
-    | quickly generating a very large amount of password reset tokens.
+    | quickly generating a very large amount of password reset tokens.np
     |
     */
 
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
-        'guest_users' => [
-            'provider' => 'guest_users',
-            'table' => 'password_resets',
+        'staff' => [
+            'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
-
-        'staff_users' => [
-            'provider' => 'staff_users',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
     ],
 
     /*

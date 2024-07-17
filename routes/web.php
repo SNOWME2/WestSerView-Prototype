@@ -1,17 +1,43 @@
 <?php
 
-use App\Http\Controllers\AdminDashboard;
-use App\Http\Controllers\UserAuth;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
-Route:: view('/login', 'auth.login')->middleware('guest')->name('login');
-Route:: post('/login', [UserAuth::class,'login']);
+Route::get('/', function () {
+    return view('indexes.welcome');
+})->name('home');
 
-Route:: view('/', 'index.landingpage')->name('Homepage');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified', 'normal'])->middleware('clear-cache')->name('dashboard');
 
-Route:: view('/register', 'auth.register')->middleware('guest')->name('register');
-Route:: post('/register', [UserAuth::class,'register']);
+Route::get('admin/dashboard', function () {
+    return view('admindashboard');
+})->middleware(['auth:staff', 'verified', 'admin'])->middleware('clear-cache')->name('admin');
 
-Route::post('/logout', [UserAuth::class, 'logout'] )->name('logout');
+Route::get('staff/dashboard', function () {
+    return view('staffdashboard');
+})->middleware(['auth:staff', 'verified', 'staff'])->middleware('clear-cache')->name('staff');
 
-Route:: view('/dashboard', [AdminDashboard::class, 'index'])->middleware('admin' )->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/reservation/create/{room}', [ReservationController::class, 'create'])->name('reservation.create');
+    Route::post('reservations', [ReservationController::class, 'store'])->name('reservation.store');
+
+});
+
+
+Route::get('/hotel', [HotelController::class, 'index'])->name('hotel.list');
+Route::get('/hotel/{hotel}', [HotelController::class, 'show'])->name('hotel.show');
+
+
+
+Route::view('guest/login', 'auth.guest.login')->name('loginGuest');
+
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
