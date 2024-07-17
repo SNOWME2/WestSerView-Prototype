@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\admin;
+use App\Http\Middleware\staff;
+use App\Http\Middleware\normal;
+use App\Http\Middleware\clearcache;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'staff'=>staff::class,
+            'admin'=>admin::class,
+            'normal'=>normal::class,
+            'clear-cache'=>clearcache::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

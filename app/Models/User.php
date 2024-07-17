@@ -10,8 +10,10 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $table ='guests';
+    protected $primaryKey = 'guest_id';
 
-    protected $guard='guests';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'username',
+        'user_name',
+
     ];
 
     /**
@@ -45,5 +48,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function Reservation(){
+        return $this->hasMany(Reservations::class, 'guest_id', 'guest_id');
     }
 }

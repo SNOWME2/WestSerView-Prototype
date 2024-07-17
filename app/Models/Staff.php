@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Staff extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $guard = 'staff';
-
+    protected $table ='staffs';
+    protected $primaryKey='staff_id';
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +21,7 @@ class Staff extends Authenticatable
         'name',
         'email',
         'password',
-        'username',
+        'role',
     ];
 
     /**
@@ -48,4 +46,5 @@ class Staff extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }
